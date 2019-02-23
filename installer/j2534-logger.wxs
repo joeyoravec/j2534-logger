@@ -10,7 +10,7 @@
   Name="J2534 Debugging Tool"
   Language="1033"
   Version="$(var.ProductVersion)"
-  Manufacturer="Drew Technologies, Inc."
+  Manufacturer="Joey Oravec"
   UpgradeCode="$(var.UpgradeCode)">
       
 		<Package InstallerVersion="200" Compressed="yes" />
@@ -45,7 +45,7 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder">
-        <Directory Id="DrewTech32Folder" Name="Drew Technologies, Inc.">
+        <Directory Id="OpenSource32Folder" Name="Open Source J2534">
           <Directory Id="INSTALLLOCATION" Name="J2534">
             <Directory Id="DriverComponent" Name="j2534-logger">
 
@@ -55,9 +55,9 @@
 
                 <File Id="ptshim32.dll" Name="ptshim32.dll" Source="..\$(var.Configuration)\ptshim32.dll" Checksum="yes" />
 
-                <RegistryKey Id="RegOmegaKey" Root="HKLM" Key="SOFTWARE\PassThruSupport.04.04\Drew Technologies Inc. - j2534-logger" Action="createAndRemoveOnUninstall">
+                <RegistryKey Id="RegLoggerKey" Root="HKLM" Key="SOFTWARE\PassThruSupport.04.04\Open Source J2534 - j2534-logger" Action="createAndRemoveOnUninstall">
                   <!-- Add registry strings for the product -->
-                  <RegistryValue Id="RegVendor" Name="Vendor" Action="write" Type="string" Value="Drew Technologies Inc." />
+                  <RegistryValue Id="RegVendor" Name="Vendor" Action="write" Type="string" Value="Open Source J2534" />
                   <RegistryValue Id="RegName" Name="Name" Action="write" Type="string" Value="j2534-logger" />
                   <RegistryValue Id="RegConfigApplication" Name="ConfigApplication" Action="write" Type="string" Value="[DriverComponent]NeedConfigApp.exe" />
                   <RegistryValue Id="RegFunctionLibrary" Name="FunctionLibrary" Action="write" Type="string" KeyPath="yes" Value="[DriverComponent]ptshim32.dll" />
@@ -89,20 +89,9 @@
          entries like phone number and Internet contact information under the Click 
          here for support information entry -->
     <Property Id="ARPCOMMENTS">Utility to create J2534 debug logs.</Property>
-    <Property Id="ARPCONTACT">
-      sales:   sales@drewtech.com
-      support: support@drewtech.com
-      Phone:   (734) 222-5228
-      Fax:     (734) 222-5008
-      Mail:
-      3915 Research Park Dr
-      Suite A10
-      Ann Arbor, MI 48108
-    </Property>
-    <Property Id="ARPHELPLINK">http://code.google.com/p/j2534-logger/</Property>
-    <Property Id="ARPURLINFOABOUT">http://code.google.com/p/j2534-logger/</Property>
-    <Property Id="ARPURLUPDATEINFO">http://code.google.com/p/j2534-logger/</Property>
-    <Property Id="ARPHELPTELEPHONE">(734)222-5228</Property>
+    <Property Id="ARPHELPLINK">https://github.com/joeyoravec/j2534-logger/</Property>
+    <Property Id="ARPURLINFOABOUT">https://github.com/joeyoravec/j2534-logger/</Property>
+    <Property Id="ARPURLUPDATEINFO">https://github.com/joeyoravec/j2534-logger/</Property>
 
     <UIRef Id="WixUI_Minimal" />
   </Product>
