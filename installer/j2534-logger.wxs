@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+  <?define RTMProductVersion="1.0.0" ?>
+  <?define ProductVersion="1.0.2" ?>
+  <?define UpgradeCode="{49A9E0B0-AF77-4983-843C-8BA7F29CF9EA}"?>
+
+  <Product
+  Id="*"
+  Name="J2534 Debugging Tool"
+  Language="1033"
+  Version="$(var.ProductVersion)"
+  Manufacturer="Drew Technologies, Inc."
+  UpgradeCode="$(var.UpgradeCode)">
+      
+		<Package InstallerVersion="200" Compressed="yes" />
+
+		<Media Id="1" Cabinet="media1.cab" EmbedCab="yes" />
+
+    <Upgrade Id="$(var.UpgradeCode)">
+      <UpgradeVersion Minimum="$(var.ProductVersion)"
+                      IncludeMinimum="no"
+                      OnlyDetect="yes"
+                      Language="1033"
+                      Property="NEWPRODUCTFOUND" />
+      <UpgradeVersion Minimum="$(var.RTMProductVersion)"
+                      IncludeMinimum="yes"
+                      Maximum="$(var.ProductVersion)"
+                      IncludeMaximum="no"
+                      Language="1033"
+                      Property="UPGRADEFOUND" />
+    </Upgrade>
+
+    <!-- Prevent downgrading -->
+    <CustomAction Id="PreventDowngrading" Error="Newer version already installed." />
+
+    <!-- Sequences -->
+    <InstallExecuteSequence>
+      <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
+      <RemoveExistingProducts After="InstallFinalize" />
+    </InstallExecuteSequence>
+    <InstallUISequence>
+      <Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
+    </InstallUISequence>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="DrewTech32Folder" Name="Drew Technologies, Inc.">
+          <Directory Id="INSTALLLOCATION" Name="J2534">
+            <Directory Id="DriverComponent" Name="j2534-logger">
+
+              <!-- TODO: Remove the comments around this Component element and the ComponentRef below in order to add resources to this installer. -->
+              <!-- SAE J2534-1 DLL -->
+              <Component Id="J2534DLLComponent" Guid="{3556670B-525A-4dac-96C0-00B144B0DD33}" Win64="no">
+
+                <File Id="ptshim32.dll" Name="ptshim32.dll" Source="..\$(var.Configuration)\ptshim32.dll" Checksum="yes" />
+
+                <RegistryKey Id="RegOmegaKey" Root="HKLM" Key="SOFTWARE\PassThruSupport.04.04\Drew Technologies Inc. - j2534-logger" Action="createAndRemoveOnUninstall">
+                  <!-- Add registry strings for the product -->
+                  <RegistryValue Id="RegVendor" Name="Vendor" Action="write" Type="string" Value="Drew Technologies Inc." />
+                  <RegistryValue Id="RegName" Name="Name" Action="write" Type="string" Value="j2534-logger" />
+                  <RegistryValue Id="RegConfigApplication" Name="ConfigApplication" Action="write" Type="string" Value="[DriverComponent]NeedConfigApp.exe" />
+                  <RegistryValue Id="RegFunctionLibrary" Name="FunctionLibrary" Action="write" Type="string" KeyPath="yes" Value="[DriverComponent]ptshim32.dll" />
+
+                  <!-- Add registry dword flags for each network protocol -->
+                  <RegistryValue Id="RegFlagCAN" Name="CAN" Action="write" Type="integer" Value="1" />
+                  <RegistryValue Id="RegFlagISO15765" Name="ISO15765" Action="write" Type="integer" Value="1" />
+                  <RegistryValue Id="RegFlagJ1850PWM" Name="J1850PWM" Action="write" Type="integer" Value="1" />
+                  <RegistryValue Id="RegFlagJ1850VPW" Name="J1850VPW" Action="write" Type="integer" Value="1" />
+                  <RegistryValue Id="RegFlagISO9141" Name="ISO9141" Action="write" Type="integer" Value="1" />
+                  <RegistryValue Id="RegFlagISO14230" Name="ISO14230" Action="write" Type="integer" Value="1" />
+                  <RegistryValue Id="RegFlagSCIAENGINE" Name="SCI_A_ENGINE" Action="write" Type="integer" Value="1" />
+                  <RegistryValue Id="RegFlagSCIATRANS" Name="SCI_A_TRANS" Action="write" Type="integer" Value="1" />
+                  <RegistryValue Id="RegFlagSCIBENGINE" Name="SCI_B_ENGINE" Action="write" Type="integer" Value="1" />
+                  <RegistryValue Id="RegFlagSCIBTRANS" Name="SCI_B_TRANS" Action="write" Type="integer" Value="1" />
+                </RegistryKey>
+              </Component>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature Id="ProductFeature" Title="installer" Level="1">
+      <ComponentRef Id="J2534DLLComponent" />
+    </Feature>
+
+    <!-- In Control Panel > Add or Remove Programs, applications can have various 
+         entries like phone number and Internet contact information under the Click 
+         here for support information entry -->
+    <Property Id="ARPCOMMENTS">Utility to create J2534 debug logs.</Property>
+    <Property Id="ARPCONTACT">
+      sales:   sales@drewtech.com
+      support: support@drewtech.com
+      Phone:   (734) 222-5228
+      Fax:     (734) 222-5008
+      Mail:
+      3915 Research Park Dr
+      Suite A10
+      Ann Arbor, MI 48108
+    </Property>
+    <Property Id="ARPHELPLINK">http://code.google.com/p/j2534-logger/</Property>
+    <Property Id="ARPURLINFOABOUT">http://code.google.com/p/j2534-logger/</Property>
+    <Property Id="ARPURLUPDATEINFO">http://code.google.com/p/j2534-logger/</Property>
+    <Property Id="ARPHELPTELEPHONE">(734)222-5228</Property>
+
+    <UIRef Id="WixUI_Minimal" />
+  </Product>
+</Wix>
